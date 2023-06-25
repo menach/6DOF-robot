@@ -3,21 +3,30 @@
 # קינמטיקה ישירה
 נציג את תוצאות הקינמטיקה הישירה עבור חמשת הנקודות שבחרנו:
 [0 0 0 0 0 0]
+![image](https://github.com/menach/6DOF-robot/assets/67026699/b65951ba-c082-41dd-9cfe-dfc5531c68f9)
 
 [90 90 60 0 0 0]
+![image](https://github.com/menach/6DOF-robot/assets/67026699/89daa566-7995-4326-8fd4-fda36c080081)
 
 [0 90 60 90 60 0]
+![image](https://github.com/menach/6DOF-robot/assets/67026699/269f71b1-c928-4674-98b8-a81028f843a3)
 
 [270 0 270 90 270 180]
+![image](https://github.com/menach/6DOF-robot/assets/67026699/9b17ee3f-1fa7-4a17-8f89-3ca9a3f13e15)
 
 [270 180 270 90 90 90]
+![image](https://github.com/menach/6DOF-robot/assets/67026699/e0e353f8-2105-4c82-80f3-185ec31abd22)
+
 # מרחב העבודה של הרובוט
 מרחב העבודה של הרובוט הוא הנקודות אליהן הרובוט יכול להגיע
 נציג תמונה איזומטרית המתארת את המרחב העבודה:
+![image](https://github.com/menach/6DOF-robot/assets/67026699/636bf272-5b67-4c49-a8f9-5d7025bb951c)
+
 # יעקוביאן
 # תכנון התנועה
 כדי לחשב את תכנון התנועה נגדיר נקודת התחלה וסיום. כדי לעבור בין הנקודות בהתחשבות בהאצה וההאטה של הרובוט נפתח פרופיל מהירויות טרפזי.
+![image](https://github.com/menach/6DOF-robot/assets/67026699/ea663dbe-c315-400f-a692-55d8d795eb5d)
+
 # סימולציה 
 סרטון של הסימולציה המבוססת מודל מקלות:
 
-![image](https://github.com/menach/6DOF-robot/assets/67026699/244ebb93-e3a6-4342-bc97-e6903ebb38a7)
