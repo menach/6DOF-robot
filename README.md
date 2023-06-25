@@ -38,12 +38,9 @@
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/636bf272-5b67-4c49-a8f9-5d7025bb951c)
 
 # יעקוביאן
-נציג את היעקוביאן שהתקבל לאחר חישוב:
-![image](https://github.com/menach/6DOF-robot/assets/67026699/def1252a-506e-496b-9341-01f8147738df)
+בעזרת נוסחא זו נוכל לחשב את היעקוביאן
+![image](https://github.com/menach/6DOF-robot/assets/67026699/9bdaac76-6ca3-447c-ad6f-1ffcba5ff231)
 
-![image](https://github.com/menach/6DOF-robot/assets/67026699/ec6f231f-45dd-44bf-b7fd-cf144e3008c7)
-
-![image](https://github.com/menach/6DOF-robot/assets/67026699/5c2c00e2-8330-44f7-bacb-6e9a90c7b012)
 # סטטיקה
 עבור F וקטור הכוחות ו T וקטור המומנטים הפועלים בקצה התפסנית. מתקבל τ וקטור המומנטים במפרקים:
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/ad488028-6c1a-443a-9466-f946d009f76b)
