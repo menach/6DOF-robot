@@ -39,11 +39,13 @@
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/636bf272-5b67-4c49-a8f9-5d7025bb951c)
 
 # יעקוביאן
-בעזרת נוסחא זו נוכל לחשב את היעקוביאן
+בעזרת נוסחא זו נוכל לחשב את היעקוביאן:
+
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/9bdaac76-6ca3-447c-ad6f-1ffcba5ff231)
 
 # סטטיקה
 עבור F וקטור הכוחות ו T וקטור המומנטים הפועלים בקצה התפסנית. מתקבל τ וקטור המומנטים במפרקים:
+
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/ad488028-6c1a-443a-9466-f946d009f76b)
 
 
