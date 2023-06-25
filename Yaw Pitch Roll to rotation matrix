@@ -1,0 +1,20 @@
+function R=ypr2rot(ypr)
+      
+     % Rotation matrix for Roll
+    R_roll = [1,      0,       0;
+              0, cos(ypr(3)), -sin(ypr(3));
+              0, sin(ypr(3)),  cos(ypr(3))];
+    
+    % Rotation matrix for Pitch
+    R_pitch = [ cos(ypr(2)), 0, sin(ypr(2));
+                0,          1, 0;
+               -sin(ypr(2)), 0, cos(ypr(2))];
+    
+    % Rotation matrix for Yaw
+    R_yaw = [cos(ypr(1)), -sin(ypr(1)), 0;
+             sin(ypr(1)),  cos(ypr(1)), 0;
+             0,              0,    1];
+    
+    % Combined rotation matrix
+    R = R_yaw * R_pitch * R_roll;
+end
