@@ -1,0 +1,11 @@
+function r = rob_self_update(r, qc, base)
+    % Apply joint inputs and update the pose of the robot
+    
+    if nargin > 2
+        r.base = base;
+    end
+    
+    r.qc = qc;
+    r.T = rob_fkine(r, qc);
+    r.jac = rob_jac(r, qc);
+    end
