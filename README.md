@@ -5,17 +5,22 @@
 [0 0 0 0 0 0]
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/b65951ba-c082-41dd-9cfe-dfc5531c68f9)
 
+
 [90 90 60 0 0 0]
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/89daa566-7995-4326-8fd4-fda36c080081)
+
 
 [0 90 60 90 60 0]
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/269f71b1-c928-4674-98b8-a81028f843a3)
 
+
 [270 0 270 90 270 180]
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/9b17ee3f-1fa7-4a17-8f89-3ca9a3f13e15)
 
+
 [270 180 270 90 90 90]
 ![image](https://github.com/menach/6DOF-robot/assets/67026699/e0e353f8-2105-4c82-80f3-185ec31abd22)
+
 
 # מרחב העבודה של הרובוט
 מרחב העבודה של הרובוט הוא הנקודות אליהן הרובוט יכול להגיע
