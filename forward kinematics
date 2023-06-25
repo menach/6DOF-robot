@@ -1,0 +1,30 @@
+function T = rob_fkine(r, q)
+    % calculate tip position and orientation of all links
+    N_DOFS = size(r.T, 3);
+    temp = eye(4);
+    T = repmat(zeros(4), 1, 1, N_DOFS);
+    for i = 1 : N_DOFS
+        r.theta(i) = q(i)+ r.offset(i);
+    end
+
+    % forward kinametics
+    for i = 1 : N_DOFS
+        ct = cos(r.theta(i));
+        st = sin(r.theta(i));
+        ca = cos(r.alpha(i));
+        sa = sin(r.alpha(i));
+        
+        temp = temp * [ ct    -st*ca   st*sa     r.a(i)*ct ; ...
+        st    ct*ca    -ct*sa    r.a(i)*st ; ...
+        0     sa       ca        r.d(i)    ; ...
+        0     0        0         1         ];
+        T(:,:,i) = temp;
+    end
+    
+    for i = 1:N_DOFS
+        T(1:3,4,i) = T(1:3,4,i) + r.base;
+    end
+    % clear temp_d;
+    % disp(r.d);
+
+end
