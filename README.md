@@ -58,6 +58,6 @@
 # סימולציה 
 סרטון של הסימולציה המבוססת מודל מקלות:
 
+https://github.com/menach/6DOF-robot/assets/67026699/ebb5d58e-795a-46e9-af7c-3a3614ad240f
 
-https://github.com/menach/6DOF-robot/assets/67026699/519b0b77-abd6-483d-8bf6-e8c41e0957c1
 
