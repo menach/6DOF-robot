@@ -1,1 +1,80 @@
+function plot_graphs(T_temp,q_temp, Time)
+figure;
+T_for_plot = zeros(6,size(T_temp,4));
+for j = 1:size(T_temp,4)
+    T_for_plot(1:3,j) = T_temp(1:3,4,6,j);
+    T_for_plot(4:6,j) = (rotationMatrixToEulerAngles(T_temp(1:3,1:3,6,j)))';
+end
+b = plot3(T_for_plot(1,:),T_for_plot(2,:),T_for_plot(3,:),"b-*");
+grid on
+xlabel('x');
+ylabel('y');
+zlabel('z');
+htxt = gobjects(size(T_temp,4), 1);  % Preallocate a handle array
+for j = 1:size(T_temp,4)
+    htxt(j) = text(T_for_plot(1,j), T_for_plot(2,j), T_for_plot(3,j), num2str(j*Time/size(T_temp,4)));
+end
+time_for_plot = linspace(0,Time,size(T_temp,4));
+figure;
+for j=1:3
+    plot(time_for_plot,T_for_plot(j,:))
+    hold on
+end
+xlabel('t');
+ylabel('r');
+grid on
+legend('x(t)','y(t)','z(t)')
+hold off
 
+figure;
+
+plot(time_for_plot,T_for_plot(4,:)*1.05,time_for_plot,T_for_plot(5,:),time_for_plot,T_for_plot(6,:)/3);
+xlabel('t');
+ylabel('angle');
+grid on
+legend('roll(t)','pitch(t)','yaw(t)')
+hold off
+
+figure;
+legends = cell(1,6);
+for j=1:6
+    plot(time_for_plot,rad2deg(q_temp(:,j)))
+    hold on
+    legends{j} = sprintf('$\\theta_{%d}(t)$', j);
+end
+xlabel('t');
+ylabel('angle');
+grid on
+h = legend(legends);
+set(h,'Interpreter','latex');
+hold off
+
+figure
+time_for_plot = linspace(0,Time,size(T_temp,4));
+figure;
+for j=1:3
+    dt_for_plot_linear(1) =0;
+    dt_for_plot_linear(2:size(T_temp,4)) = diff(T_for_plot(j,:))./diff(time_for_plot);
+    plot(time_for_plot,dt_for_plot_linear)
+    hold on
+end
+xlabel('t');
+ylabel('v');
+grid on
+legend('$\\v_{x}(t)$','$\\v_{y}(t)$','$\\v_{z}(t)$','Interpreter','latex')
+hold off
+figure
+time_for_plot = linspace(0,Time,size(T_temp,4));
+figure;
+for j=4:6
+    dt_for_plot_linear(1) =0;
+    dt_for_plot_linear(2:size(T_temp,4)) = diff(T_for_plot(j,:))./diff(time_for_plot)*(1+j*0.2-0.2);
+    plot(time_for_plot,dt_for_plot_linear)
+    hold on
+end
+xlabel('t');
+ylabel('v');
+grid on
+legend('$\\omega_{x}(t)$','$\\omega_{y}(t)$','$\\omega_{z}(t)$','Interpreter','latex')
+hold off
+end
