@@ -1,0 +1,77 @@
+function g = nrob_plot(g, r, view_vector, axis_scale, x_range, y_range, z_range)
+    N_DOFS = size(r.T, 3);
+    
+    if (g.h == -1) % only do once
+        figure;
+        hold on;
+        grid on;
+        axis equal
+        
+        xlim(x_range);
+        ylim(y_range);
+        zlim(z_range);
+        
+        view(view_vector);
+        g.h = plot3(0, 0, 0, '-m*', 'LineWidth', 4);
+        for i = 1 : N_DOFS
+        g.quiver_x(i) = quiver3(1,0,0,1,0,0, axis_scale, 'g');
+        g.quiver_y(i) = quiver3(0,1,0,0,1,0, axis_scale, 'r');
+        g.quiver_z(i) = quiver3(0,0,1,0,0,1, axis_scale, 'b');
+        g.text_x(i) = text(0,0,0, '');
+        end
+        xlabel('x');
+        ylabel('y');
+        zlabel('z');
+        
+        for i = 1 : N_DOFS+1
+            g.htxt(i) = text(0,0,0, num2str(i), 'FontWeight', 'bold');
+            g.text_x(i) = text(0,0,0, num2str(i), 'FontWeight', 'bold');
+        end
+        
+        set(g.htxt(1), 'Position', r.base);
+        set(g.text_x(1), 'Position', r.base);
+    end
+    for i = 1 : N_DOFS
+        x(:, i)  = r.T(1:3, 4, i);
+        set(g.htxt(i+1), 'Position', x(:, i) + [0; 0; 0.02]);
+    end
+    
+    set(g.h, 'XData', [r.base(1) x(1, :)], 'YData', [r.base(2) x(2, :)],'ZData', [r.base(3) x(3, :)]);
+    
+    X_Data = zeros(1,1,N_DOFS);
+    Y_Data = zeros(1,1,N_DOFS);
+    Z_Data = zeros(1,1,N_DOFS);
+
+    for i = 1 : N_DOFS
+        qc = r.qc(i);
+        a = r.a(i); 
+        d = r.d(i);
+        forx = r.T(1, 4, i);
+        fory = r.T(2, 4, i);
+        forz = r.T(3, 4, i);
+     
+        X_Data(1,1,i) = forx;
+        Y_Data(1,1,i) = fory;
+        Z_Data(1,1,i) = forz;
+
+        set(g.quiver_x(i), 'XData', X_Data(1,1,i), 'YData', Y_Data(1,1,i), 'ZData', Z_Data(1,1,i), 'UData', r.T(1, 1, i), 'VData', r.T(2, 1, i), 'WData', r.T(3, 1, i),'AutoScaleFactor', 0.1);
+        set(g.quiver_y(i), 'XData', X_Data(1,1,i), 'YData', Y_Data(1,1,i), 'ZData', Z_Data(1,1,i), 'UData', r.T(1, 2, i), 'VData', r.T(2, 2, i), 'WData', r.T(3, 2, i),'AutoScaleFactor', 0.1);
+        set(g.quiver_z(i), 'XData', X_Data(1,1,i), 'YData', Y_Data(1,1,i), 'ZData', Z_Data(1,1,i), 'UData', r.T(1, 3, i), 'VData', r.T(2, 3, i), 'WData', r.T(3, 3, i),'AutoScaleFactor', 0.1);
+        drawnow;
+    end
+    
+    
+
+    % After updating quiver plots, get the end-effector position
+    end_effector_pos = r.T(1:3, 4, end);
+    
+    % Add text to the plot at the end effector's position
+    x_pos = end_effector_pos(1);
+    y_pos = end_effector_pos(2);
+    z_pos = end_effector_pos(3);
+    
+    plot3(x_pos, y_pos, z_pos, 'r.-', 'MarkerSize', 15);
+    
+    drawnow;
+
+end
