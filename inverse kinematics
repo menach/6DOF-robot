@@ -1,57 +1,77 @@
-function [q, iter_taken, err] = rob_ikine1(r, p, treshold, max_iter)
-    % Compute the inverse kinematics by using the pseudo-inverse method
-    %
-    % https://groups.csail.mit.edu/drl/journal_club/papers/033005/buss-2004.pdf
-    % See Equ. 7.
+function q = calculate_joint_angles(robot, p_target)
+
+    % Extract position and orientation from the target
+    position = p_target(1:3);
+    orientation = robot.ypr;
+  % Convert the orientation from Euler angles to a rotation matrix.
+    c = cos(orientation);
+    s = sin(orientation);
     
-%     q = r.qc;
-%     T =  rob_fkine(r, q);
-%     x = T(1:3, 4, end);
-    % Calculate the transformation matrix
-    %     T = getTransformationMatrix1_2(x, y, z, r.ypr(3), r.ypr(2), yaw);
-    
-    % Extract the position and orientation from the transformation matrix
-    
-    if nargin  < 3
-        treshold = 0.01;
-        max_iter = 100;
-    elseif nargin  < 4
-        max_iter = 100;
+    r = [c(3) * c(2),c(3) * s(2) * s(1) - s(3) * c(1), c(3) * s(2) * c(1) + s(3) * s(1);
+         s(3) * c(2), s(3) * s(2) * s(1) + c(3) * c(1),s(3) * s(2) * c(1) - c(3) * s(1);
+         -s(2), c(2) * s(1), c(2) * c(1)];
+
+    % Calculate the position of the wrist center.
+    wc = position - robot.d(6).* r(:, 3);
+
+
+    r_c = norm([wc(1) wc(2)]);
+    z_c1 = wc(3) - robot.d(1);
+    r_c1 = r_c - robot.a(1);
+    cc = norm([r_c1,z_c1]);
+    L34 = norm([robot.a(3), robot.d(4)]);
+    D=((L34)^2+(robot.a(2))^2-(cc)^2)/(2*robot.a(2)*(L34));
+    if abs(D)>1
+         error('Out of range');
     end
+
+    if wc(1)==0 && wc(2)==0
+        q1 =0;
+    else
+        q1 = atan2(wc(2)/r_c,wc(1)/r_c);
+    end
+   
+    aq = atan2(robot.d(4)/L34,robot.a(3)/L34);
+    q3 = atan2(sqrt(1-D^2),D) + aq - pi;
+    qa = atan2(z_c1/cc,r_c1/cc);
+    D1=(-(L34)^2+(robot.a(2))^2+(cc)^2)/(2*robot.a(2)*(cc));
+    q2 = atan2(sqrt(1-D1^2),D1)+qa;
+
+    R03 = [cos(q2 + q3)*cos(q1), -sin(q1), sin(q2 + q3)*cos(q1);
+    cos(q2 + q3)*sin(q1),  cos(q1), sin(q2 + q3)*sin(q1);
+    sin(q2 + q3),0,-cos(q2 + q3)];
+
+    R36=R03\r;
+
+
+    q5=atan2(-sqrt(1-R36(3,3)^2),R36(3,3));   % if theta 5 is 0 or 180 we take theta 5 = 0
     
-    % Get current pose.
-    q = r.qc;
-    T =  rob_fkine(r, q);
-    x = T(1:3, 4, end);
-    jac = rob_jac(r, q);
-    
-    iter_taken = 1;
-    
-    while 1
-        iter_taken = iter_taken + 1;
-        
-        delta_x = p - x;
-        
-        delta_q = pinv(jac)*delta_x;
-        q = q + delta_q;
-        q = min(r.ub, max(q, r.lb)); % This is a saturation function.
-        
-        [~, x] = rob_fkine_ee(r, q);
-        jac = rob_jac(r, q);
-        
-        err = norm(delta_x);
-        
-        if err < treshold || iter_taken > max_iter
-%             fprintf('*rob_ikine1* breaks after %i iterations with errror %f.\n', k, err);
-            break;
+    if q5 == 0
+        q4=atan2(-R36(2,3),-R36(1,3));
+        q6=atan2(-R36(3,2),-R36(3,1));
+    else
+        q4 = atan2((R36(2,3)/sin(q5)),(R36(1,3)/sin(q5)));
+        q6 = atan2((R36(3,2)/sin(q5)),(-R36(3,1)/sin(q5)));
+    end
+    % Validate the joint angles. 
+    q_min = robot.lb;
+    q_max = robot.ub;
+    q = [q1, q2, q3, q4, q5, q6];
+
+    for i = 1:6
+        if ~(q_min(i) <= q(i) && q(i) <= q_max(i))
+            error('The q%d angle must be between %f and %f.', i, q_min(i), q_max(i));
         end
     end
-     T =  rob_fkine(r, q);
-    [roll, pitch, yaw] = rotationMatrixToEulerAngles(T(1:3,1:3,end));
+    T = rob_fkine(robot, q);
+    [yaw, pitch,roll] = rotationMatrixToEulerAngles(T(1:3,1:3,end));
 
-    disp(['ikine', ' q = ', num2str(rad2deg(q(:,1)'))]);
-    disp(['XYZ desiered: ', num2str(p')]);
+    disp(['calculate_joint_angles', ' q = ', num2str(rad2deg(q))]);
+    disp(['XYZ desiered: ', num2str(p_target')]);
     disp(['XYZ actual: ', num2str((T(1:3,4,end))')]);
-    disp(['ypr desiered:',num2str(rad2deg(r.ypr))]);
-    disp(['ypr actual:',num2str([yaw, pitch, roll])]);
+    disp(['XYZ gap: ', num2str((p_target-T(1:3,4,end))')]);
+    
+    disp(['ypr desiered:',num2str(rad2deg(robot.ypr))]);
+    disp(['ypr actual:',num2str([roll, pitch,yaw])])
+    disp(['ypr gap:',num2str(rad2deg(robot.ypr)-[roll, pitch,yaw ])])
 end
