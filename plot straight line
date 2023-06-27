@@ -1,8 +1,6 @@
 function [r] = plot_straight_line_2(r ,p_end, g)
-%     Time = input("plaese input value for desire time to achive the target:");
-%     acceleration = input("plaese input value for desire acceleration:");
-    Time = 10;
-    acceleration = 0.04; 
+    Time = input("plaese input value for desire time to achive the target:");
+    acceleration = input("plaese input value for desire acceleration:");
     p_start =r.T(1:3,4,end)';
     X_t = path_planning(acceleration,Time,p_start,p_end);
     ypr_start = rotationMatrixToEulerAngles(r.T(1:3,1:3,end));
