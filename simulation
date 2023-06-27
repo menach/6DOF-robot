@@ -1,3 +1,4 @@
+clc;
 N_DOFS=6;
 
 % gom
@@ -16,7 +17,7 @@ Elbow = 1;
 roll = 30;
 pitch = 20;
 yaw = 10;
-ypr = [yaw, pitch, roll]*0*pi/180;
+ypr = [yaw, pitch, roll]*pi/180;
 
 robot = struct( ...
 'base', base, ...
@@ -34,22 +35,22 @@ robot = struct( ...
 'Elbow', Elbow, ...
 'ypr', ypr);
 
-temp1 =[0 0 0 0 0 0;...
+temp1 =[0 90 0 0 0 0;...
 90 90 60 0 0 0;...
 0 90 60 90 60 0;...
 270 0 270 90 270 180;...  
 270 180 270 90 90 90];
 
-robot = rob_self_update(robot, deg2rad(temp1(2, :)));
+robot = rob_self_update(robot, deg2rad(temp1(1, :)));
 
 robot_1 = robot;
 p_start = [1.2, 1, 1];
-p_end = [0.05, 0.2, 0.1]*-1.5;
+p_end = [-0.4, 0.5, 0.5];
 view_vector =  [7.828 8.177];
 axis_scale = 0.3;
 x_range = [-1 1]*1;
 y_range = x_range;
-z_range = [-1 ,x_range(2)];
+z_range = [0 ,x_range(2)];
 
 g = nrob_graphic(); %יצירה של מערכת צרים
 g = nrob_plot(g, robot, view_vector, axis_scale, x_range, y_range, z_range);
